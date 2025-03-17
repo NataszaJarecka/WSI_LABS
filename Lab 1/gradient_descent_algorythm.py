@@ -11,7 +11,7 @@ def gradient(f, variables):
 def gradient_descent(f, variables, step, start, presicion, iter):
     grad = gradient(f, variables)
     point = np.array(start)
-    all_points = [start]
+    all_points = [point]
     i = 0
     while i < iter and np.linalg.norm(grad(*point)) > presicion:
         grad_value = np.array(grad(*point))
