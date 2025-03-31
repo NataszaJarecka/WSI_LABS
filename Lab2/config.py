@@ -1,0 +1,8 @@
+from evaluation import evaluate
+
+EVALUATION = evaluate
+GENE_COUNT = 400
+SIZE = 20
+POPULATION_COUNT = 100
+MUTATION_PROB = 0.01
+GENERATIONS = 100
