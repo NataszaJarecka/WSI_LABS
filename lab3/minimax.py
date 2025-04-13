@@ -1,22 +1,54 @@
+import random
+import copy
 
-def minimax(evaluation, state, depth, game, move_max, alpha, beta):
+
+
+def minimax(evaluation, depth, game, move_max, max_player, min_player, alpha, beta):
     if game.is_finished() or depth == 0:
-        return evaluation(state)
+        return evaluation(game.state, max_player, min_player), None
 
     possible_moves = game.get_moves()
+    best_moves = []
+
 
     if move_max:
-        for move in possible_moves:
-            alpha = max(alpha, minimax(move, depth - 1, not move_max, alpha, beta))
-            if alpha >= beta: return alpha
-        return alpha
+
+        max_eval = -float('inf')
+        for move in sorted(possible_moves, key=lambda m: abs(m.column - 3)):
+
+            game_copy = copy.deepcopy(game)
+            game_copy.make_move(move)
+
+            eval_value, _ = minimax(evaluation, depth - 1, game_copy, not move_max, max_player, min_player, alpha, beta)
+            if eval_value > max_eval:
+                best_moves.clear()
+                max_eval = eval_value
+                best_moves = [move]
+            elif eval_value == max_eval:
+                best_moves.append(move)
+            alpha = max(alpha, eval_value)
+            if alpha >= beta:
+                break
+        best_move = random.choice(best_moves) if best_moves else None
+        return max_eval, best_move
 
     else:
-        for move in possible_moves:
-            beta = min(beta, minimax(move, depth - 1, not move_max, alpha, beta))
-            if alpha >= beta: return beta
-        return beta
+        min_eval = float('inf')
+        for move in sorted(possible_moves, key=lambda m: abs(m.column - 3)):
 
 
+            game_copy = copy.deepcopy(game)
+            game_copy.make_move(move)
 
-
+            eval_value, _ = minimax(evaluation, depth - 1, game_copy, not move_max, max_player, min_player, alpha, beta)
+            if eval_value < min_eval:
+                best_moves.clear()
+                min_eval = eval_value
+                best_moves = [move]
+            elif eval_value == min_eval:
+                best_moves.append(move)
+            beta = min(beta, eval_value)
+            if alpha >= beta:
+                break
+        best_move = random.choice(best_moves) if best_moves else None
+        return min_eval, best_move
