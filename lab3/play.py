@@ -28,7 +28,7 @@ def play(depth1, depth2, max_first):
             max_move = False
             depth = depth2
 
-        _, move = minimax(evaluate_move, depth, game, max_move, max_player, min_player, float('-inf'), float("inf"))
+        _, move = minimax(evaluate_move, depth, game.state, max_move, max_player, min_player, float('-inf'), float("inf"))
 
         game.make_move(move)
         #print(game.state)
@@ -36,6 +36,3 @@ def play(depth1, depth2, max_first):
     winner = game.get_winner()
     if winner:
         return winner
-
-
-
